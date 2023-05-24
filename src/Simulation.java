@@ -10,7 +10,7 @@ public class Simulation extends JPanel implements ActionListener {
     ArrayList<Ball> balls;
     float accG;
     Image icon;
-    final int PIXELS_PER_METER = 50;
+    final int PIXELS_PER_METER = 20;
     final float X_BOUND;
     final float Y_BOUND;
     final float DT;
@@ -22,7 +22,6 @@ public class Simulation extends JPanel implements ActionListener {
         Y_BOUND = (float) height / PIXELS_PER_METER;
         setPreferredSize(new Dimension(width, height));
         balls = new ArrayList<>();
-        balls.add(new Ball(0, 0, 10, 10, 0, 0, 0, 0));
         accG = gravitationalAcceleration;
         icon = new ImageIcon("resources/ball.png").getImage();
         setBackground(Color.BLACK);
@@ -36,6 +35,10 @@ public class Simulation extends JPanel implements ActionListener {
         }
     }
 
+    public void addBall(float posX, float posY, float velX, float velY, float accX, float accY, float rad, float mass) {
+        balls.add(new Ball(posX, posY, velX, velY, accX, accY, rad, mass));
+    }
+
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -44,9 +47,11 @@ public class Simulation extends JPanel implements ActionListener {
 
 
         for (Ball ball : balls) {
-            int posX = (int) (ball.posX * PIXELS_PER_METER);
-            int posY = getHeight() - (int) (ball.posY * PIXELS_PER_METER);
-            g.drawImage(icon, posX, posY, null);
+            int radius = (int) (ball.rad * PIXELS_PER_METER);
+            int posX = (int) (ball.posX * PIXELS_PER_METER) - radius;
+            int posY = getHeight() - (int) (ball.posY * PIXELS_PER_METER) - radius;
+
+            g.drawImage(icon, posX, posY, 2 * radius, 2 * radius, null);
 
         }
     }

@@ -28,6 +28,9 @@ public class Window extends JFrame implements WindowListener {
         setResizable(false);
         setVisible(true);
 
+        simulation.addBall(0, 0, 10, 25, 0, 0, 1, 1);
+        simulation.addBall(60, 0, -10, 25, 0, 0, 1, 1);
+
     }
 
     public static void main(String[] args) {
