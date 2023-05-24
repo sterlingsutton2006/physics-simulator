@@ -2,16 +2,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Window extends JFrame implements WindowListener {
+public class Window extends JFrame {
     private Simulation simulation;
     public final int WINDOW_WIDTH;
     public final int WINDOW_HEIGHT;
     public final int FRAME_RATE;
-    private boolean isRunning;
-    public Window(int width, int height, int fps) {
-        isRunning = true;
 
-        addWindowListener(this);
+    public Window(int width, int height, int fps) {
 
         this.WINDOW_WIDTH = width;
         this.WINDOW_HEIGHT = height;
@@ -30,45 +27,11 @@ public class Window extends JFrame implements WindowListener {
 
         simulation.addBall(0, 0, 10, 25, 0, 0, 1, 1);
         simulation.addBall(60, 0, -10, 25, 0, 0, 1, 1);
+        simulation.addBall(30, 10, 0, 20, 0, 0, 2, 3);
 
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new Window(1280, 720, 60));
-    }
-
-    @Override
-    public void windowOpened(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowClosing(WindowEvent e) {
-        isRunning = false;
-    }
-
-    @Override
-    public void windowClosed(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowIconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeiconified(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowActivated(WindowEvent e) {
-
-    }
-
-    @Override
-    public void windowDeactivated(WindowEvent e) {
-
     }
 }
