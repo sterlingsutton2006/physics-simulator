@@ -19,9 +19,9 @@ public class Ball {
     }
 
     public void update(float dt, float accG) {
-        velX += accX * dt;
-        velY += (accY + accG) * dt;
         posX += velX * dt + accX * 0.5 * dt * dt;
         posY += velY * dt + (accY + accG) * 0.5 * dt * dt;
+        velX += accX * dt;
+        velY += (accY + accG) * dt;
     }
 }

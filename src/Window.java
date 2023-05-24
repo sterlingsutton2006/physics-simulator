@@ -28,25 +28,6 @@ public class Window extends JFrame implements WindowListener {
         setResizable(false);
         setVisible(true);
 
-        new Thread(this::startSimulationLoop);
-        //startSimulationLoop();
-
-    }
-    private void startSimulationLoop() {
-        float frameTime = 1000f / FRAME_RATE;
-
-        while (isRunning) {
-            simulation.updateBalls();
-
-            simulation.repaint();
-
-            try {
-                Thread.sleep((long) frameTime);
-            }
-            catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     public static void main(String[] args) {

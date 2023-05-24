@@ -1,9 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
+import java.sql.Time;
 import java.util.ArrayList;
 
-public class Simulation extends JPanel {
+public class Simulation extends JPanel implements ActionListener {
     ArrayList<Ball> balls;
     float accG;
     Image icon;
@@ -19,10 +22,13 @@ public class Simulation extends JPanel {
         Y_BOUND = (float) height / PIXELS_PER_METER;
         setPreferredSize(new Dimension(width, height));
         balls = new ArrayList<>();
-        balls.add(new Ball(10, 10, 0, 0, 0, 0, 0, 0));
+        balls.add(new Ball(0, 0, 10, 10, 0, 0, 0, 0));
         accG = gravitationalAcceleration;
         icon = new ImageIcon("resources/ball.png").getImage();
         setBackground(Color.BLACK);
+
+        Timer timer = new Timer((int) (frameTime * 1000), this);
+        timer.start();
     }
     public void updateBalls() {
         for (Ball ball : balls) {
@@ -35,13 +41,19 @@ public class Simulation extends JPanel {
     protected void paintComponent(Graphics g) {
 
         super.paintComponent(g);
-        int posX = 0;
-        int posY = 0;
+
 
         for (Ball ball : balls) {
-            posX = (int) (ball.posX * PIXELS_PER_METER);
-            posY = getHeight() - (int) (ball.posY * PIXELS_PER_METER);
+            int posX = (int) (ball.posX * PIXELS_PER_METER);
+            int posY = getHeight() - (int) (ball.posY * PIXELS_PER_METER);
             g.drawImage(icon, posX, posY, null);
+
         }
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        updateBalls();
+        repaint();
     }
 }
