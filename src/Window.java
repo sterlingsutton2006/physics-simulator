@@ -21,10 +21,10 @@ public class Window extends JFrame implements WindowListener {
         setIconImage(new ImageIcon("resources/ball.png").getImage());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        simulation = new Simulation(-9.81f);
-        getContentPane().add(simulation);
+        simulation = new Simulation(-9.81f, width, height, 1f / FRAME_RATE);
+        add(simulation);
 
-        setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        pack();
         setResizable(false);
         setVisible(true);
 
@@ -33,14 +33,15 @@ public class Window extends JFrame implements WindowListener {
 
     }
     private void startSimulationLoop() {
-        long frameTime = (long) (1000f / FRAME_RATE);
+        float frameTime = 1000f / FRAME_RATE;
 
         while (isRunning) {
+            simulation.updateBalls();
 
             simulation.repaint();
 
             try {
-                Thread.sleep(frameTime);
+                Thread.sleep((long) frameTime);
             }
             catch (InterruptedException e) {
                 e.printStackTrace();
