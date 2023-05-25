@@ -8,7 +8,7 @@ public class Simulation extends JPanel implements ActionListener {
     ArrayList<Ball> balls;
     float accG;
     Image icon;
-    final int PIXELS_PER_METER = 10;
+    final int PIXELS_PER_METER = 25;
     final float X_BOUND;
     final float Y_BOUND;
     final float DT;
@@ -123,8 +123,9 @@ public class Simulation extends JPanel implements ActionListener {
             int posX = (int) (ball.posX * PIXELS_PER_METER) - radius;
             int posY = getHeight() - (int) (ball.posY * PIXELS_PER_METER) - radius;
 
-            g.drawImage(icon, posX, posY, 2 * radius, 2 * radius, null);
-
+            //g.drawImage(icon, posX, posY, 2 * radius, 2 * radius, null);
+            g.setColor(new Color(0, 255, 0));
+            g.fillOval(posX, posY, 2 * radius, 2 * radius);
         }
     }
 
