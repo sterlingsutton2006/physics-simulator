@@ -30,8 +30,8 @@ public class Simulation extends JPanel implements ActionListener {
     public void updateBalls() {
         for (Ball ball : balls) {
             ball.update(DT, accG);
-            handleCollision();
         }
+        handleCollision();
     }
 
     public void addBall(float posX, float posY, float velX, float velY, float accX, float accY, float rad, float mass) {
@@ -40,17 +40,16 @@ public class Simulation extends JPanel implements ActionListener {
 
     public void handleCollision() {
 
+        for (Ball ball : balls) {
+            boundaryCollision(ball);
+        }
+
         for (int a = 0; a < balls.size(); a++) {
             for (int b = a + 1; b < balls.size(); b++) {
-                if (isColliding(balls.get(a), balls.get(b))) {
+                if (balls.get(a) != balls.get(b) && isColliding(balls.get(a), balls.get(b))) {
                     collisionResponse(balls.get(a), balls.get(b));
                 }
             }
-        }
-
-
-        for (Ball ball : balls) {
-            boundaryCollision(ball);
         }
     }
 
@@ -84,6 +83,22 @@ public class Simulation extends JPanel implements ActionListener {
     }
 
     public void collisionResponse(Ball a, Ball b) {
+
+        // new position
+        float dx = (a.posX - b.posX);
+        float dy = (a.posY - b.posY);
+        double angle = Math.atan2(dy, dx);
+        float distance = (float) Math.sqrt(dx * dx + dy * dy);
+        float distanceMinusRadii = distance - a.rad - b.rad;
+        float moveX = (float) (distanceMinusRadii * Math.cos(angle) / 2f);
+        float moveY = (float) (distanceMinusRadii * Math.sin(angle) / 2f);
+
+        b.posX += moveX;
+        b.posY += moveY;
+        a.posX -= moveX;
+        a.posY -= moveY;
+
+        // new velocity
         float newVelXA = (a.velX * (a.mass - b.mass) + (2 * b.mass * b.velX)) / (a.mass + b.mass);
         float newVelYA = (a.velY * (a.mass - b.mass) + (2 * b.mass * b.velY)) / (a.mass + b.mass);
         float newVelXB = (b.velX * (b.mass - a.mass) + (2 * a.mass * a.velX)) / (a.mass + b.mass);
@@ -93,6 +108,7 @@ public class Simulation extends JPanel implements ActionListener {
         a.velY = newVelYA;
         b.velX = newVelXB;
         b.velY = newVelYB;
+
     }
 
 
