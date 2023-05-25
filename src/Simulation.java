@@ -28,10 +28,10 @@ public class Simulation extends JPanel implements ActionListener {
         timer.start();
     }
     public void updateBalls() {
+        handleCollision();
         for (Ball ball : balls) {
             ball.update(DT, accG);
         }
-        handleCollision();
     }
 
     public void addBall(float posX, float posY, float velX, float velY, float accX, float accY, float rad, float mass) {
@@ -43,7 +43,6 @@ public class Simulation extends JPanel implements ActionListener {
         for (Ball ball : balls) {
             boundaryCollision(ball);
         }
-
         for (int a = 0; a < balls.size(); a++) {
             for (int b = a + 1; b < balls.size(); b++) {
                 if (balls.get(a) != balls.get(b) && isColliding(balls.get(a), balls.get(b))) {
@@ -75,7 +74,7 @@ public class Simulation extends JPanel implements ActionListener {
     }
 
     public boolean isColliding(Ball a, Ball b) {
-        float sumRadiiSquared = a.rad * a.rad + b.rad * b.rad;
+        float sumRadiiSquared = (a.rad + b.rad) * (a.rad + b.rad);
         float dx = a.posX - b.posX;
         float dy = a.posY - b.posY;
         float distanceSquared = dx * dx + dy * dy;
@@ -99,6 +98,7 @@ public class Simulation extends JPanel implements ActionListener {
         a.posY -= moveY;
 
         // new velocity
+        // to be changed
         float newVelXA = (a.velX * (a.mass - b.mass) + (2 * b.mass * b.velX)) / (a.mass + b.mass);
         float newVelYA = (a.velY * (a.mass - b.mass) + (2 * b.mass * b.velY)) / (a.mass + b.mass);
         float newVelXB = (b.velX * (b.mass - a.mass) + (2 * a.mass * a.velX)) / (a.mass + b.mass);
