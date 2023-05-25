@@ -8,7 +8,7 @@ public class Simulation extends JPanel implements ActionListener {
     ArrayList<Ball> balls;
     float accG;
     Image icon;
-    final int PIXELS_PER_METER = 20;
+    final int PIXELS_PER_METER = 10;
     final float X_BOUND;
     final float Y_BOUND;
     final float DT;
@@ -18,11 +18,11 @@ public class Simulation extends JPanel implements ActionListener {
         DT = frameTime;
         X_BOUND = (float) width / PIXELS_PER_METER;
         Y_BOUND = (float) height / PIXELS_PER_METER;
-        setPreferredSize(new Dimension(width, height));
         balls = new ArrayList<>();
         accG = gravitationalAcceleration;
         icon = new ImageIcon("resources/ball.png").getImage();
         setBackground(Color.BLACK);
+        setPreferredSize(new Dimension(width, height));
 
         Timer timer = new Timer((int) (frameTime * 1000), this);
         timer.start();
@@ -39,15 +39,15 @@ public class Simulation extends JPanel implements ActionListener {
     }
 
     public void handleCollision() {
-        /*
-        for (int i = 0; i < balls.size(); i++) {
-            for (int j = i + 1; j < balls.size(); i++) {
-                if (isColliding(balls.get(i), balls.get(j))) {
-                    collisionResponse(balls.get(i), balls.get(j));
+
+        for (int a = 0; a < balls.size(); a++) {
+            for (int b = a + 1; b < balls.size(); b++) {
+                if (isColliding(balls.get(a), balls.get(b))) {
+                    collisionResponse(balls.get(a), balls.get(b));
                 }
             }
         }
-         */
+
 
         for (Ball ball : balls) {
             boundaryCollision(ball);
@@ -55,21 +55,23 @@ public class Simulation extends JPanel implements ActionListener {
     }
 
     public void boundaryCollision(Ball ball) {
+        float multiplier = -1;
+
         if (ball.posX + ball.rad >= X_BOUND) {
             ball.posX = X_BOUND - ball.rad;
-            ball.velX *= -1;
+            ball.velX *= multiplier;
         }
         if (ball.posX - ball.rad <= 0) {
             ball.posX = ball.rad;
-            ball.velX *= -1;
+            ball.velX *= multiplier;
         }
         if (ball.posY + ball.rad >= Y_BOUND) {
             ball.posY = Y_BOUND - ball.rad;
-            ball.velY *= -1;
+            ball.velY *= multiplier;
         }
         if (ball.posY - ball.rad <= 0) {
             ball.posY = ball.rad;
-            ball.velY *= -1;
+            ball.velY *= multiplier;
         }
     }
 
@@ -78,16 +80,19 @@ public class Simulation extends JPanel implements ActionListener {
         float dx = a.posX - b.posX;
         float dy = a.posY - b.posY;
         float distanceSquared = dx * dx + dy * dy;
-
         return distanceSquared <= sumRadiiSquared;
     }
 
     public void collisionResponse(Ball a, Ball b) {
-        float dx = a.posX - b.posX;
-        float dy = a.posY - b.posY;
-        float angle = (float) Math.atan2(dy, dx);
+        float newVelXA = (a.velX * (a.mass - b.mass) + (2 * b.mass * b.velX)) / (a.mass + b.mass);
+        float newVelYA = (a.velY * (a.mass - b.mass) + (2 * b.mass * b.velY)) / (a.mass + b.mass);
+        float newVelXB = (b.velX * (b.mass - a.mass) + (2 * a.mass * a.velX)) / (a.mass + b.mass);
+        float newVelYB = (b.velY * (b.mass - a.mass) + (2 * a.mass * a.velY)) / (a.mass + b.mass);
 
-
+        a.velX = newVelXA;
+        a.velY = newVelYA;
+        b.velX = newVelXB;
+        b.velY = newVelYB;
     }
 
 

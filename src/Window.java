@@ -25,13 +25,11 @@ public class Window extends JFrame {
         setResizable(false);
         setVisible(true);
 
-        simulation.addBall(0, 0, 10, 25, 0, 0, 1, 1);
-        simulation.addBall(60, 0, -10, 25, 0, 0, 1, 1);
-        simulation.addBall(30, 10, 0, 20, 0, 0, 2, 3);
+        simulation.addBall(4, 5, 15, 10, 0, 0, 1, 1);
 
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Window(1280, 720, 60));
+        SwingUtilities.invokeLater(() -> new Window(1600, 900, 144));
     }
 }
